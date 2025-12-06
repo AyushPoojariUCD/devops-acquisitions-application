@@ -32,23 +32,22 @@ jobs:
         id: eslint
         run: |
           echo "::notice::Running ESLint check..."
-          if ! npm run lint; then
+          npm run lint || {
             echo "::error::ESLint found issues in your code"
-            echo "::notice::Run 'npm run lint:fix' to automatically fix some issues"
+            echo "::notice::Run 'npm run lint:fix' to fix auto-fixable issues"
             exit 1
-          fi
+          }
 
       - name: Run Prettier check
         id: prettier
         run: |
           echo "::notice::Running Prettier format check..."
-          if ! npm run format:check; then
+          npm run format:check || {
             echo "::error::Code formatting issues found"
             echo "::notice::Run 'npm run format' to fix formatting issues"
             exit 1
-          fi
+          }
 
       - name: Success notification
         if: success()
-        run: |
-          echo "::notice::All linting and formatting checks passed! ✅"
+        run: echo "::notice::All linting and formatting checks passed! ✅"
